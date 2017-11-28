@@ -7,6 +7,7 @@ extends Node2D
 var board_size = Vector2(40,40)
 
 onready var ground = get_node("Ground")
+onready var features = get_node("Features")
 
 onready var half_tile_offset = ground.get_cell_size() / 2
 var board = []
@@ -20,7 +21,64 @@ func _ready():
 		board.append([])
 		for y in range(board_size.y):
 			board[x].append(Tile.new())
+	generate_map()
+	
 # adds actor to board and actor list
+
+func generate_map():
+	randomize()
+	for x in range(board_size.x):
+		for y in range(board_size.y):
+			if(int(rand_range(0, 2)) != 0):
+				board[x][y].wall = true;
+	cell_auto(15)
+	place_stairs()
+	wall_update()
+
+func cell_auto(loops):
+	for _ in range(loops):
+		for x in range(board_size.x):
+			for y in range(board_size.y):
+				var occupied_neighbors = 0
+				for i in range(max(0, x - 1), min(x + 1, board_size.x - 1) + 1):
+					for j in range(max(0, y - 1), min(y + 1, board_size.y - 1) + 1):
+						occupied_neighbors += 1 if board[i][j].wall else 0
+				if occupied_neighbors > 5:
+					board[x][y].wall = true
+				if occupied_neighbors < 4:
+					board[x][y].wall = false
+					
+func place_stairs():
+	var x = 0
+	var y = 0
+	while(board[x][y].wall and x<40):
+		x+=1
+		y+=1
+	features.set_cellv(Vector2(x,y), 0)
+	var accessible_list = [Vector2(x, y)]
+	board[x][y].accessible = true
+	var num_accessible = 0
+	while num_accessible < accessible_list.size():
+		var u = accessible_list[num_accessible]
+		for xx in range(u.x - 1, u.x + 2):
+			for yy in range(u.y - 1, u.y + 2):
+				if xx >= 0 and xx < board_size.x and yy >= 0 and yy < board_size.y:
+					if !board[xx][yy].accessible and !board[xx][yy].wall:
+						board[xx][yy].accessible = true
+						accessible_list.append(Vector2(xx, yy))
+		num_accessible += 1
+	
+	var downstair = accessible_list[accessible_list.size() - 1 - randi() % accessible_list.size() / 4]
+	features.set_cellv(Vector2(downstair.x, downstair.y), 1)
+
+func wall_update():
+	for x in range(board_size.x):
+		for y in range(board_size.y):
+			if board[x][y].wall or !board[x][y].accessible:
+				ground.set_cellv(Vector2(x, y), 1)
+			else:
+				ground.set_cellv(Vector2(x, y), 0)
+
 func add_actor(actor, pos=Vector2()):
 	if is_in_bounds(pos):
 		if !has_wall(pos) && !has_actor(pos):
@@ -29,7 +87,8 @@ func add_actor(actor, pos=Vector2()):
 			actor.pos = pos
 			actor.set_pos(ground.map_to_world(pos) + half_tile_offset)
 			self.add_child(actor)
-		
+			return true
+	return false
 # removes actor from the board and actor list
 func remove_actor(actor, pos=Vector2()):
 	board[pos.x][pos.y].actor = null
@@ -56,7 +115,7 @@ func is_in_bounds(pos=Vector2()):
 	return pos.x >= 0 && pos.x < board_size.x && pos.y >= 0 && pos.y < board_size.y
 # returns true if the position contains a wall
 func has_wall(pos=Vector2()):
-	return board[pos.x][pos.y].wall != null
+	return board[pos.x][pos.y].wall
 # returns true if the position contains an actor
 func has_actor(pos=Vector2()):
 	return board[pos.x][pos.y].actor != null
@@ -66,3 +125,4 @@ class Tile:
 	var feature
 	var items = []
 	var actor
+	var accessible = false
