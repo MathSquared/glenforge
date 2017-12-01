@@ -7,6 +7,7 @@ var pos
 var maxLife
 var curLife
 var att
+var vision
 onready var board = get_parent()
 
 func _ready():
@@ -18,6 +19,7 @@ func _ready():
 func init_stats():
 	maxLife = 1
 	att = 1
+	vision = 1
 # getter and setter for var pos
 func get_board_pos():
 	return pos

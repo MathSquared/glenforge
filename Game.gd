@@ -11,26 +11,35 @@ func _ready():
 	while(!board.add_actor(player, Vector2(x,y)) and x<40):
 		x+=1
 		y+=1
+	player.drawVision()
 	var packedRat = preload("res://Rat.tscn")
 	var rat = packedRat.instance()
 	board.add_actor(rat, Vector2(10,14))
 func _input(event):
 	if event.is_action_pressed("move_up"):
 		board.move_actor(player.get_board_pos(), Vector2(0,-1))
+		player.drawVision()
 	if event.is_action_pressed("move_down"):
 		board.move_actor(player.get_board_pos(), Vector2(0,1))
+		player.drawVision()
 	if event.is_action_pressed("move_left"):
 		board.move_actor(player.get_board_pos(), Vector2(-1,0))
+		player.drawVision()
 	if event.is_action_pressed("move_right"):
 		board.move_actor(player.get_board_pos(), Vector2(1,0))
+		player.drawVision()
 	if event.is_action_pressed("move_upleft"):
 		board.move_actor(player.get_board_pos(), Vector2(-1,-1))
+		player.drawVision()
 	if event.is_action_pressed("move_downleft"):
 		board.move_actor(player.get_board_pos(), Vector2(-1,1))
+		player.drawVision()
 	if event.is_action_pressed("move_upright"):
 		board.move_actor(player.get_board_pos(), Vector2(1,-1))
+		player.drawVision()
 	if event.is_action_pressed("move_downright"):
 		board.move_actor(player.get_board_pos(), Vector2(1,1))
+		player.drawVision()
 	if event.is_action_pressed("level_descend"):
 		board.remove_child(player)
 		self.remove_child(board)
@@ -42,6 +51,7 @@ func _input(event):
 		while(!board.add_actor(player, Vector2(x,y)) and x<40):
 			x+=1
 			y+=1
+		player.drawVision()
 		var packedRat = preload("res://Rat.tscn")
 		var rat = packedRat.instance()
 		board.add_actor(rat, Vector2(10,14))

@@ -8,3 +8,9 @@ func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
 	pass
+func init_stats():
+	maxLife = 5
+	att = 1
+	vision = 5
+func drawVision():
+	board.drawVision(pos, vision)

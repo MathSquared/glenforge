@@ -8,6 +8,10 @@ var board_size = Vector2(40,40)
 
 onready var ground = get_node("Ground")
 onready var features = get_node("Features")
+onready var dark = get_node("Dark")
+onready var unseen = get_node("Unseen")
+
+onready var visionCalc = get_node("Vision")
 
 onready var half_tile_offset = ground.get_cell_size() / 2
 var board = []
@@ -29,6 +33,7 @@ func generate_map():
 	randomize()
 	for x in range(board_size.x):
 		for y in range(board_size.y):
+			unseen.set_cellv(Vector2(x,y), 0)
 			if(int(rand_range(0, 2)) != 0):
 				board[x][y].wall = true;
 	cell_auto(15)
@@ -119,6 +124,22 @@ func has_wall(pos=Vector2()):
 # returns true if the position contains an actor
 func has_actor(pos=Vector2()):
 	return board[pos.x][pos.y].actor != null
+# draws line from p0 to p1
+func drawLine(p0, p1):
+	var line = visionCalc.getLine(p0,p1)
+	for p in line :
+		unseen.set_cellv(p,-1)
+		dark.set_cellv(p,-1)
+func drawVision(p, rad):
+	for x in range(board_size.x):
+		for y in range(board_size.y):
+			dark.set_cellv(Vector2(x,y), 0)
+	var points = visionCalc.getCircle(p, rad)
+	for point in points :
+		drawLine(p, point)
+	points = visionCalc.getCircle(p, rad-1)
+	for point in points :
+		drawLine(p, point)
 class Tile:
 	var wall
 	var flr
