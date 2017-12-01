@@ -14,9 +14,6 @@ func _ready():
 		x+=1
 		y+=1
 	player.drawVision()
-	var packedRat = preload("res://Rat.tscn")
-	var rat = packedRat.instance()
-	board.add_actor(rat, Vector2(10,14))
 	levels.append(board)
 func _input(event):
 	if event.is_action_pressed("move_up"):

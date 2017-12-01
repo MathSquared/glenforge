@@ -28,13 +28,23 @@ func _ready():
 				board[x].append(Tile.new())
 		generate_map()
 		exist = true
+		create_enemies()
 	else:
 		for each_tile in accessible_list:
 			if board[each_tile.x][each_tile.y].actor != null:
 				board[each_tile.x][each_tile.y].actor.set_board_pos(Vector2(each_tile.x,each_tile.y))
 				board[each_tile.x][each_tile.y].actor.set_pos(ground.map_to_world(Vector2(each_tile.x,each_tile.y)) + half_tile_offset)
 # adds actor to board and actor list
-
+func create_enemies():
+	var enemies = randi()%10+5
+	var created = 0
+	var packedRat2 = preload("res://Rat.tscn")
+	while(created < enemies):
+		var x = randf()*board_size.x
+		var y = randf()*board_size.y
+		var rat2 = packedRat2.instance()
+		if(add_actor(rat2, Vector2(x, y))):
+			created+=1
 func generate_map():
 	randomize()
 	for x in range(board_size.x):
