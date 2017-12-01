@@ -146,16 +146,23 @@ func drawLine(p0, p1):
 	for p in line :
 		unseen.set_cellv(p,-1)
 		dark.set_cellv(p,-1)
+		board[p.x][p.y].seen = true
 func drawVision(p, rad):
 	for x in range(board_size.x):
 		for y in range(board_size.y):
 			dark.set_cellv(Vector2(x,y), 0)
+			board[x][y].seen = false
 	var points = visionCalc.getCircle(p, rad)
 	for point in points :
 		drawLine(p, point)
 	points = visionCalc.getCircle(p, rad-1)
 	for point in points :
 		drawLine(p, point)
+	for actor in actors:
+		if board[actor.pos.x][actor.pos.y].seen :
+			actor.show()
+		else :
+			actor.hide()
 class Tile:
 	var wall
 	var flr
@@ -163,3 +170,4 @@ class Tile:
 	var items = []
 	var actor
 	var accessible = false
+	var seen = false
