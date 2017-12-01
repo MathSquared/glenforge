@@ -25,7 +25,6 @@ func get_board_pos():
 	return pos
 func set_board_pos(new_pos=Vector2()):
 	pos = new_pos
-	print(pos)
 func attack(actor):
 	actor.get_damaged(att)
 func get_damaged(dmg):

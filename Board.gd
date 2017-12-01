@@ -3,7 +3,7 @@ extends Node2D
 # class member variables go here, for example:
 # var a = 2
 # var b = "textvar"
-
+var exist = false
 var board_size = Vector2(40,40)
 
 onready var ground = get_node("Ground")
@@ -15,18 +15,24 @@ onready var visionCalc = get_node("Vision")
 
 onready var half_tile_offset = ground.get_cell_size() / 2
 var board = []
-
+var accessible_list = []
 var actors = []
 
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
-	for x in range(board_size.x):
-		board.append([])
-		for y in range(board_size.y):
-			board[x].append(Tile.new())
-	generate_map()
-	
+	if !exist:
+		for x in range(board_size.x):
+			board.append([])
+			for y in range(board_size.y):
+				board[x].append(Tile.new())
+		generate_map()
+		exist = true
+	else:
+		for each_tile in accessible_list:
+			if board[each_tile.x][each_tile.y].actor != null:
+				board[each_tile.x][each_tile.y].actor.set_board_pos(Vector2(each_tile.x,each_tile.y))
+				board[each_tile.x][each_tile.y].actor.set_pos(ground.map_to_world(Vector2(each_tile.x,each_tile.y)) + half_tile_offset)
 # adds actor to board and actor list
 
 func generate_map():
@@ -60,7 +66,7 @@ func place_stairs():
 		x+=1
 		y+=1
 	features.set_cellv(Vector2(x,y), 0)
-	var accessible_list = [Vector2(x, y)]
+	accessible_list = [Vector2(x, y)]
 	board[x][y].accessible = true
 	var num_accessible = 0
 	while num_accessible < accessible_list.size():
