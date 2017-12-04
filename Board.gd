@@ -22,6 +22,7 @@ func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
 	if !exist:
+		print("making board")
 		for x in range(board_size.x):
 			board.append([])
 			for y in range(board_size.y):
@@ -39,11 +40,10 @@ func create_enemies():
 	var enemies = randi()%10+5
 	var created = 0
 	var packedRat2 = preload("res://Rat.tscn")
-	while(created < enemies):
-		var x = randf()*board_size.x
-		var y = randf()*board_size.y
+	while(created < min(enemies, accessible_list.size())):
+		var pos = accessible_list[randi()%accessible_list.size()]
 		var rat2 = packedRat2.instance()
-		if(add_actor(rat2, Vector2(x, y))):
+		if(add_actor(rat2, pos)):
 			created+=1
 func generate_map():
 	randomize()
@@ -141,28 +141,41 @@ func has_wall(pos=Vector2()):
 func has_actor(pos=Vector2()):
 	return board[pos.x][pos.y].actor != null
 # draws line from p0 to p1
-func drawLine(p0, p1):
+func draw_line(p0, p1):
 	var line = visionCalc.getLine(p0,p1)
 	for p in line :
 		unseen.set_cellv(p,-1)
 		dark.set_cellv(p,-1)
 		board[p.x][p.y].seen = true
-func drawVision(p, rad):
+# draws field of vision for a circle of radius rad around point p on the board
+func draw_vision(p, rad):
 	for x in range(board_size.x):
 		for y in range(board_size.y):
 			dark.set_cellv(Vector2(x,y), 0)
 			board[x][y].seen = false
 	var points = visionCalc.getCircle(p, rad)
+	var pointDict = {}
+	for y in range(-rad, rad+1):
+		pointDict[y] = []
 	for point in points :
-		drawLine(p, point)
-	points = visionCalc.getCircle(p, rad-1)
-	for point in points :
-		drawLine(p, point)
+		pointDict[int(point.y - p.y)].append(point)
+	for key in pointDict.keys() :
+		pointDict[key].sort()
+		for x in range(pointDict[key][0].x, pointDict[key].back().x+1) :
+			draw_line(p, Vector2(x,pointDict[key][0].y))
+	#for point in points :
+		#draw_line(p, point)
+	#points = visionCalc.getCircle(p, rad-1)
+	#for point in points :
+	#	draw_line(p, point)
 	for actor in actors:
 		if board[actor.pos.x][actor.pos.y].seen :
 			actor.show()
 		else :
 			actor.hide()
+func runActorSteps():
+	for actor in actors:
+		actor.runStep()
 class Tile:
 	var wall
 	var flr

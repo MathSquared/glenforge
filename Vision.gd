@@ -38,9 +38,8 @@ func getLine(p0=Vector2(), p1=Vector2()):
 		incY = 1
 	else:
 		incY = -1
-	
-	while (curX != p1.x || curY != p1.y) && curX < board.size() && curX >= 0 &&  curY < board[curX].size() && curY >= 0:
-		points.append(Vector2(curX, curY))
+	points.append(Vector2(curX, curY))
+	while (curX != p1.x || curY != p1.y) && boardScene.is_in_bounds(Vector2(curX,curY)):
 		if board[curX][curY].wall :
 			break 
 		var err2 = err*2
@@ -50,6 +49,8 @@ func getLine(p0=Vector2(), p1=Vector2()):
 		if err2 < dx :
 			err += dx
 			curY += incY
+		if boardScene.is_in_bounds(Vector2(curX,curY)):
+			points.append(Vector2(curX, curY))
 		
 	return points
 # returns list of points that are in a circle of radius r around the given point p

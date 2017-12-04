@@ -8,6 +8,7 @@ var maxLife
 var curLife
 var att
 var vision
+var name
 onready var board = get_parent()
 
 func _ready():
@@ -20,6 +21,7 @@ func init_stats():
 	maxLife = 1
 	att = 1
 	vision = 1
+	name = "Unnamed"
 # getter and setter for var pos
 func get_board_pos():
 	return pos
@@ -34,3 +36,6 @@ func get_damaged(dmg):
 func die():
 	board.remove_actor(self, pos)
 	self.queue_free()
+# runs the ai for a single turn
+func runStep():
+	pass

@@ -12,5 +12,6 @@ func init_stats():
 	maxLife = 5
 	att = 1
 	vision = 5
-func drawVision():
-	board.drawVision(pos, vision)
+	name = "Player"
+func draw_vision():
+	board.draw_vision(pos, vision)

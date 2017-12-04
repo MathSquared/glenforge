@@ -1,6 +1,7 @@
-[gd_resource type="TileSet" load_steps=2 format=1]
+[gd_resource type="TileSet" load_steps=3 format=1]
 
 [ext_resource path="res://assets/dawnlike/Objects/Floor.png" type="Texture" id=1]
+[ext_resource path="res://assets/dawnlike/Objects/Wall.png" type="Texture" id=2]
 
 [resource]
 
@@ -15,4 +16,15 @@
 0/shapes = [  ]
 0/one_way_collision_direction = Vector2( 0, 0 )
 0/one_way_collision_max_depth = 0.0
+1/name = "Wall"
+1/texture = ExtResource( 2 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 16, 64, 16, 16 )
+1/occluder_offset = Vector2( 8, 8 )
+1/navigation_offset = Vector2( 8, 8 )
+1/shape_offset = Vector2( 0, 0 )
+1/shapes = [  ]
+1/one_way_collision_direction = Vector2( 0, 0 )
+1/one_way_collision_max_depth = 0.0
 

@@ -6,3 +6,24 @@ extends "res://Actor.gd"
 func init_stats():
 	maxLife = 2
 	att = 1
+	vision = 4
+	name = "rat"
+func runStep():
+	var visionCalc = board.get_node("Vision")
+	var points = visionCalc.getCircle(pos,vision)
+	var pointDict = {}
+	for y in range(-vision, vision+1):
+		pointDict[y] = []
+	for point in points :
+		pointDict[int(point.y - pos.y)].append(point)
+	for key in pointDict.keys() :
+		pointDict[key].sort()
+		for x in range(pointDict[key][0].x, pointDict[key].back().x+1) :
+			points.append(Vector2(x,pointDict[key][0].y))
+	for p in points:
+		if board.is_in_bounds(p):
+			if board.has_actor(p):
+				if board.board[p.x][p.y].actor.name == "Player":
+					var path = visionCalc.getLine(pos, p)
+					board.move_actor(pos, path[1] - pos)
+					break

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=1]
+[gd_scene load_steps=3 format=1]
 
 [ext_resource path="res://assets/dawnlike/Objects/Floor.png" type="Texture" id=1]
+[ext_resource path="res://assets/dawnlike/Objects/Wall.png" type="Texture" id=2]
 
 [node name="Node2D" type="Node2D"]
 
@@ -9,5 +10,11 @@
 texture = ExtResource( 1 )
 region = true
 region_rect = Rect2( 16, 112, 16, 16 )
+
+[node name="Wall" type="Sprite" parent="."]
+
+texture = ExtResource( 2 )
+region = true
+region_rect = Rect2( 16, 64, 16, 16 )
 
 
