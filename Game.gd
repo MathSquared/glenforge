@@ -5,14 +5,11 @@ onready var board = get_node("Board")
 onready var player = board.get_node("Player")
 var levels = []
 var level = 0
+var prev_downstair = Vector2(17, 17)
 
 func _ready():
 	set_process_input(true)
-	var x = 0
-	var y = 0
-	while(!board.add_actor(player, Vector2(x,y)) and x<40):
-		x+=1
-		y+=1
+	board.add_actor(player, board.upstair)
 	player.draw_vision()
 	levels.append(board)
 func _input(event):
@@ -33,6 +30,7 @@ func _input(event):
 	if event.is_action_pressed("move_downright"):
 		step(Vector2(1,1))
 	if event.is_action_pressed("level_descend"):
+		prev_downstair = board.downstair
 		board.remove_child(player)
 		self.remove_child(board)
 		level += 1
@@ -41,15 +39,11 @@ func _input(event):
 			board = packedBoard.instance()
 			levels.append(board)
 			self.add_child(board)
-			var x = 0
-			var y = 0
-			while(!board.add_actor(player, Vector2(x,y)) and x<40):
-				x+=1
-				y+=1
+			board.add_actor(player, board.upstair)
 			player.draw_vision()
-			var packedRat = preload("res://Rat.tscn")
-			var rat = packedRat.instance()
-			board.add_actor(rat, Vector2(10,14))
+#			var packedRat = preload("res://Rat.tscn")
+#			var rat = packedRat.instance()
+#			board.add_actor(rat, Vector2(10,14))
 		else:
 			board = levels[level]
 			self.add_child(board)

@@ -18,6 +18,9 @@ var board = []
 var accessible_list = []
 var actors = []
 
+var upstair
+var downstair
+
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
@@ -70,14 +73,27 @@ func cell_auto(loops):
 					board[x][y].wall = false
 					
 func place_stairs():
-	var x = 0
-	var y = 0
-	while(board[x][y].wall and x<40):
-		x+=1
-		y+=1
-	features.set_cellv(Vector2(x,y), 0)
-	accessible_list = [Vector2(x, y)]
-	board[x][y].accessible = true
+	upstair = get_parent().prev_downstair
+	var q = [Vector2(upstair.x, upstair.y)]
+	var index = 0;
+	while(board[upstair.x][upstair.y].wall):
+		var u = q[index]
+		for xx in range(u.x - 1, u.x + 2):
+			for yy in range(u.y - 1, u.y + 2):
+				if xx >= 0 and xx < board_size.x and yy >= 0 and yy < board_size.y:
+					if !board[xx][yy].wall:
+						upstair.x = xx
+						upstair.y = yy
+						break
+					else:
+						q.append(Vector2(xx, yy))
+			if !board[upstair.x][upstair.y].wall:
+						break
+		index += 1
+	features.set_cellv(upstair, 0)
+	
+	accessible_list = [upstair]
+	board[upstair.x][upstair.y].accessible = true
 	var num_accessible = 0
 	while num_accessible < accessible_list.size():
 		var u = accessible_list[num_accessible]
@@ -89,7 +105,7 @@ func place_stairs():
 						accessible_list.append(Vector2(xx, yy))
 		num_accessible += 1
 	
-	var downstair = accessible_list[accessible_list.size() - 1 - randi() % accessible_list.size() / 4]
+	downstair = accessible_list[accessible_list.size() - 1 - randi() % accessible_list.size() / 4]
 	features.set_cellv(Vector2(downstair.x, downstair.y), 1)
 
 func wall_update():
