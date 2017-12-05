@@ -11,6 +11,6 @@ script/script = ExtResource( 1 )
 
 texture = ExtResource( 2 )
 region = true
-region_rect = Rect2( 0, 0, 16, 16 )
+region_rect = Rect2( 48, 64, 16, 16 )
 
 
