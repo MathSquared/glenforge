@@ -24,6 +24,8 @@ func runStep():
 		if board.is_in_bounds(p):
 			if board.has_actor(p):
 				if board.board[p.x][p.y].actor.name == "Player":
-					var path = visionCalc.getLine(pos, p)
-					board.move_actor(pos, path[1] - pos)
+					var path = visionCalc.a_star_path(pos, p)
+					print(path)
+					if(!board.has_actor(path[1]) || board.board[path[1].x][path[1].y].actor.name == "Player"):
+						board.move_actor(pos, path[1] - pos)
 					break
