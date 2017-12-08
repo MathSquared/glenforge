@@ -179,19 +179,14 @@ func draw_vision(p, rad):
 		pointDict[key].sort()
 		for x in range(pointDict[key][0].x, pointDict[key].back().x+1) :
 			draw_line(p, Vector2(x,pointDict[key][0].y))
-	#for point in points :
-		#draw_line(p, point)
-	#points = visionCalc.getCircle(p, rad-1)
-	#for point in points :
-	#	draw_line(p, point)
 	for actor in actors:
 		if board[actor.pos.x][actor.pos.y].seen :
 			actor.show()
 		else :
 			actor.hide()
-func runActorSteps():
+func run_actor_steps():
 	for actor in actors:
-		actor.runStep()
+		actor.run_step()
 class Tile:
 	var wall
 	var flr

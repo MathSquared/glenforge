@@ -59,6 +59,7 @@ func _input(event):
 			board.add_child(player)
 		#print(level, levels.size())
 func step(move):
-	board.move_actor(player.get_board_pos(), move)
-	player.draw_vision()
-	board.runActorSteps()
+	if player != null:
+		board.move_actor(player.get_board_pos(), move)
+		player.draw_vision()
+		board.run_actor_steps()

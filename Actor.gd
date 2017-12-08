@@ -37,5 +37,5 @@ func die():
 	board.remove_actor(self, pos)
 	self.queue_free()
 # runs the ai for a single turn
-func runStep():
+func run_step():
 	pass

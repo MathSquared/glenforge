@@ -15,3 +15,6 @@ func init_stats():
 	name = "Player"
 func draw_vision():
 	board.draw_vision(pos, vision)
+func die():
+	.die()
+	board.get_parent().player = null
