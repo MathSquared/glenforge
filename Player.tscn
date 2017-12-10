@@ -1,15 +1,18 @@
-[gd_scene load_steps=3 format=1]
+[gd_scene load_steps=4 format=1]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
-[ext_resource path="res://assets/dawnlike/Characters/Player0.png" type="Texture" id=2]
+[ext_resource path="res://Inventory.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/dawnlike/Characters/Player0.png" type="Texture" id=3]
 
 [node name="Player" type="Node2D"]
 
 script/script = ExtResource( 1 )
 
+[node name="Inventory" parent="." instance=ExtResource( 2 )]
+
 [node name="Sprite" type="Sprite" parent="."]
 
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 region = true
 region_rect = Rect2( 48, 64, 16, 16 )
 

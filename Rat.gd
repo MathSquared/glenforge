@@ -6,7 +6,7 @@ extends "res://Actor.gd"
 var target
 
 func init_stats():
-	maxLife = 2
+	max_life = 2
 	att = 1
 	vision = 5
 	name = "rat"

@@ -9,7 +9,7 @@ func _ready():
 	# Initialization here
 	pass
 func init_stats():
-	maxLife = 5
+	max_life = 5
 	att = 1
 	vision = 5
 	name = "Player"

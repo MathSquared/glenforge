@@ -17,6 +17,7 @@ onready var half_tile_offset = ground.get_cell_size() / 2
 var board = []
 var accessible_list = []
 var actors = []
+var item_list = {}
 
 var upstair
 var downstair
@@ -38,7 +39,6 @@ func _ready():
 			if board[each_tile.x][each_tile.y].actor != null:
 				board[each_tile.x][each_tile.y].actor.set_board_pos(Vector2(each_tile.x,each_tile.y))
 				board[each_tile.x][each_tile.y].actor.set_pos(ground.map_to_world(Vector2(each_tile.x,each_tile.y)) + half_tile_offset)
-# adds actor to board and actor list
 func create_enemies():
 	var enemies = randi()%10+5
 	var created = 0
@@ -80,7 +80,7 @@ func place_stairs():
 		var u = q[index]
 		for xx in range(u.x - 1, u.x + 2):
 			for yy in range(u.y - 1, u.y + 2):
-				if xx >= 0 and xx < board_size.x and yy >= 0 and yy < board_size.y:
+				if is_in_bounds(Vector2(xx,yy)):
 					if !board[xx][yy].wall:
 						upstair.x = xx
 						upstair.y = yy
@@ -107,7 +107,7 @@ func place_stairs():
 	
 	downstair = accessible_list[accessible_list.size() - 1 - randi() % accessible_list.size() / 4]
 	features.set_cellv(Vector2(downstair.x, downstair.y), 1)
-
+# updates the graphics to draw all of the walls on the board
 func wall_update():
 	for x in range(board_size.x):
 		for y in range(board_size.y):
@@ -115,7 +115,7 @@ func wall_update():
 				ground.set_cellv(Vector2(x, y), 1)
 			else:
 				ground.set_cellv(Vector2(x, y), 0)
-
+# adds actor to board and actor list
 func add_actor(actor, pos=Vector2()):
 	if is_in_bounds(pos):
 		if !has_wall(pos) && !has_actor(pos):
@@ -147,6 +147,20 @@ func move_actor(old_pos=Vector2(), move=Vector2()):
 			board[new_pos.x][new_pos.y].actor.set_board_pos(new_pos)
 			return new_pos
 	return old_pos
+# adds item to board
+func add_item(item, pos):
+	if is_in_bounds(pos):
+		if !has_wall(pos):
+			self.add_child(item)
+			board[pos.x][pos.y].items.append(item)
+			item_list[item] = pos
+# gets item from board and adds it to the actor's inventory
+func grab_item(actor, item):
+	self.remove_child(item)
+	var pos = item_list[item]
+	board[pos.x][pos.y].items.erase(item)
+	item_list.erase(item)
+	actor.get_node("Inventory").add_child(item)
 # returns true if the position is in the board
 func is_in_bounds(pos=Vector2()):
 	return pos.x >= 0 && pos.x < board_size.x && pos.y >= 0 && pos.y < board_size.y
@@ -162,13 +176,13 @@ func draw_line(p0, p1):
 	for p in line :
 		unseen.set_cellv(p,-1)
 		dark.set_cellv(p,-1)
-		board[p.x][p.y].seen = true
+		board[p.x][p.y].in_sight = true
 # draws field of vision for a circle of radius rad around point p on the board
 func draw_vision(p, rad):
 	for x in range(board_size.x):
 		for y in range(board_size.y):
 			dark.set_cellv(Vector2(x,y), 0)
-			board[x][y].seen = false
+			board[x][y].in_sight = false
 	var points = visionCalc.getCircle(p, rad)
 	var pointDict = {}
 	for y in range(-rad, rad+1):
@@ -180,10 +194,11 @@ func draw_vision(p, rad):
 		for x in range(pointDict[key][0].x, pointDict[key].back().x+1) :
 			draw_line(p, Vector2(x,pointDict[key][0].y))
 	for actor in actors:
-		if board[actor.pos.x][actor.pos.y].seen :
+		if board[actor.pos.x][actor.pos.y].in_sight :
 			actor.show()
 		else :
 			actor.hide()
+# goes through list of actors and runs their ai for a turn
 func run_actor_steps():
 	for actor in actors:
 		actor.run_step()
@@ -194,4 +209,4 @@ class Tile:
 	var items = []
 	var actor
 	var accessible = false
-	var seen = false
+	var in_sight = false
