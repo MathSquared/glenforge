@@ -4,7 +4,7 @@ extends ProgressBar
 # var a = 2
 # var b = "textvar"
 onready var ui = get_parent()
-onready var health_label = get_node("Health")
+onready var health_label = get_node("HealthLabel")
 
 func _ready():
 	# Called every time the node is added to the scene.

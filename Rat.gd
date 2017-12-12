@@ -9,7 +9,7 @@ func init_stats():
 	max_life = 2
 	att = 1
 	vision = 5
-	name = "rat"
+	name = "Rat"
 func run_step():
 	var visionCalc = board.get_node("Vision")
 	var points = visionCalc.getCircle(pos,vision)

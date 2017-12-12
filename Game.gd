@@ -18,7 +18,8 @@ func _ready():
 	var board_length = board.half_tile_offset.y*board.board_size.y*2
 	ui.set_pos(Vector2(board_width,0))
 	ui.set_size(Vector2(board_width/2, board_length))
-	ui.update_draw()
+	ui.prep_ui()
+	ui.update_ui()
 	OS.set_window_size(Vector2(board_width*3/2, board_length))
 func _input(event):
 	if event.is_action_pressed("move_up"):
@@ -71,6 +72,6 @@ func step(move):
 		board.move_actor(player.get_board_pos(), move)
 		player.draw_vision()
 		board.run_actor_steps()
-		ui.update_draw()
+		ui.update_ui()
 
 
