@@ -13,9 +13,10 @@ func _ready():
 	pass
 func update_draw():
 	update()
-func connect(actors):
+func connect_actors(actors):
 	for actor in actors:
-		actor.connect("send_to_log", self, "retrieve_log")
-func retrieve_log(text):
+		if !actor.is_connected("send_to_log", self, "retrieve_text"):
+			actor.connect("send_to_log", self, "retrieve_text")
+func retrieve_text(text):
 	newline()
 	add_text(text)

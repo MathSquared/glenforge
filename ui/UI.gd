@@ -21,4 +21,4 @@ func prep_ui():
 func connect_log():
 	var game_log = get_node("LogPanel/Log")
 	var actors = game.board.actors
-	game_log.connect(actors)
+	game_log.connect_actors(actors)

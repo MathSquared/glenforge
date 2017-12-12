@@ -4,6 +4,7 @@ extends "res://Actor.gd"
 # var a = 2
 # var b = "textvar"
 var target
+var t_path
 
 func init_stats():
 	max_life = 2
@@ -28,13 +29,17 @@ func run_step():
 				if board.board[p.x][p.y].actor.name == "Player":
 					var path = visionCalc.a_star_path(pos, p)
 					target = p
+					t_path = path
 					if(!board.has_actor(path[1]) || board.board[path[1].x][path[1].y].actor.name == "Player"):
 						board.move_actor(pos, path[1] - pos)
+						t_path.pop_front()
 					return
 	if target != null:
-		var path = visionCalc.a_star_path(pos, target)
-		if path[0] == target:
+		#var path = visionCalc.a_star_path(pos, target)
+		if t_path[0] == target:
 			target = null
 			return
-		if(!board.has_actor(path[1]) || board.board[path[1].x][path[1].y].actor.name == "Player"):
-			board.move_actor(pos, path[1] - pos)
+		if(!board.has_actor(t_path[1]) || board.board[t_path[1].x][t_path[1].y].actor.name == "Player"):
+			board.move_actor(pos, t_path[1] - pos)
+			t_path.pop_front()
+			print(pos)
