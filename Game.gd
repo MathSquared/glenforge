@@ -49,6 +49,7 @@ func _input(event):
 			levels.append(board)
 			self.add_child(board)
 			board.add_actor(player, board.upstair)
+			ui.connect_log()
 			player.draw_vision()
 #			var packedRat = preload("res://Rat.tscn")
 #			var rat = packedRat.instance()

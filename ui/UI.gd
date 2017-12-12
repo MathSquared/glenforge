@@ -17,6 +17,8 @@ func update_ui():
 func prep_ui():
 	var log_panel = get_node("LogPanel")
 	log_panel.set_margin(MARGIN_TOP, get_size().y - 300)
+	connect_log()
+func connect_log():
 	var game_log = get_node("LogPanel/Log")
 	var actors = game.board.actors
 	game_log.connect(actors)
