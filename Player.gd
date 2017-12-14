@@ -17,4 +17,5 @@ func draw_vision():
 	board.draw_vision(pos, vision)
 func die():
 	.die()
+	emit_signal("send_to_log","Press R to reset the game.")
 	board.get_parent().player = null

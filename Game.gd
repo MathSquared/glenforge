@@ -68,6 +68,8 @@ func _input(event):
 			self.add_child(board)
 			board.add_child(player)
 		#print(level, levels.size())
+	if event.is_action_pressed("reset"):
+		get_tree().reload_current_scene()
 func step(move):
 	if player != null:
 		board.move_actor(player.get_board_pos(), move)
