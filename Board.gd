@@ -43,11 +43,11 @@ func create_enemies():
 	var enemies = randi()%10+5
 	var created = 0
 	var packedRat2 = preload("res://Rat.tscn")
-	while(created < min(enemies, accessible_list.size()-1)):
-		var pos = accessible_list[(randi()%(accessible_list.size()-1))+1]
-		var rat2 = packedRat2.instance()
-		if(add_actor(rat2, pos)):
-			created+=1
+	for each_tile in accessible_list:
+		var chance = randi()%100
+		if(chance < 1):
+			var rat2 = packedRat2.instance()
+			add_actor(rat2,each_tile)
 func generate_map():
 	randomize()
 	for x in range(board_size.x):

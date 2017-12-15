@@ -1,4 +1,4 @@
-extends "res://Actor.gd"
+	extends "res://Actor.gd"
 
 # class member variables go here, for example:
 # var a = 2
@@ -7,7 +7,7 @@ var target
 var t_path
 
 func init_stats():
-	max_life = 2
+	max_life = 1
 	att = 1
 	vision = 5
 	name = "Rat"
